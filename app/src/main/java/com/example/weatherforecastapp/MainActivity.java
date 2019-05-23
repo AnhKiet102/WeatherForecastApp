@@ -2,7 +2,6 @@ package com.example.weatherforecastapp;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,6 +14,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,7 +51,48 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("ketqua",response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String day=jsonObject.getString("dt");
+                            String name=jsonObject.getString("name");
+                            txtcity.setText("Tên Thành Phố: "+name);
+
+                            long l= Long.valueOf(day);
+                            Date date= new Date(l*1000L);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE yyyy-MM-dd HH-mm-ss");
+                            String Day= simpleDateFormat.format(date);
+                            txtDay.setText(Day);
+                            JSONArray jsonArrayWeather= jsonObject.getJSONArray("weather");
+                            JSONObject jsonObjectWeather=jsonArrayWeather.getJSONObject(0);
+                            String status= jsonObjectWeather.getString("main");
+                            String icon=jsonObjectWeather.getString("icon");
+                            Picasso.with(MainActivity.this).load("http://openweathermap.org/img/w"+icon+".png").into(imgIcon);
+                            txtStatus.setText(status);
+
+                            JSONObject jsonObjectMain= jsonObject.getJSONObject("main");
+                            String nhietdo= jsonObjectMain.getString("temp");
+                            String doam= jsonObjectMain.getString("humidity");
+
+                            Double  a= Double.valueOf(nhietdo);
+                            String NhietDO= String.valueOf(a.intValue());
+                             txtTemp.setText(NhietDO+"°C");
+                             txtHumidity.setText(doam);
+
+                             JSONObject jsonObjectWind= jsonObject.getJSONObject("wind");
+                             String gio= jsonObjectWind.getString("speed");
+                             txtwind.setText(gio+"m/s");
+
+                             JSONObject jsonObjectCloud= jsonObject.getJSONObject("clouds");
+                             String may= jsonObjectCloud.getString("all");
+                             txtcloud.setText(may+"%");
+
+                             JSONObject jsonObjectsys= jsonObject.getJSONObject("sys");
+                             String country= jsonObjectsys.getString("country");
+                             txtCountry.setText("Tên quốc gia:"+country);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
                     }
                 }, new Response.ErrorListener() {

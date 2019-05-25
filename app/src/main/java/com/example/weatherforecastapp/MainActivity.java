@@ -1,5 +1,6 @@
 package com.example.weatherforecastapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -29,17 +30,39 @@ public class MainActivity extends AppCompatActivity {
     Button btnSeach, btnChangeActivity;
     TextView txtcity,txtCountry, txtTemp,txtHumidity,txtwind,txtcloud, txtDay,txtStatus;
     ImageView imgIcon;
+    String City;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         AnhXa();
+       // GetcurrentWeatherData("Ha Noi");
         btnSeach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String city= editTextSearch.getText().toString();
-                GetcurrentWeatherData(city);
+                if( city.equals(""))
+                {
+                    City="Ha Noi";
+                    GetcurrentWeatherData(City);
+                }
+                else
+                {
+                    City=city;
+                    GetcurrentWeatherData(City);
+                }
+
+            }
+        });
+        btnChangeActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String city= editTextSearch.getText().toString();
+                Intent intent = new Intent(MainActivity.this,Main3Activity.class);
+                intent.putExtra("name",city);
+                startActivity(intent);
             }
         });
     }
@@ -66,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             JSONObject jsonObjectWeather=jsonArrayWeather.getJSONObject(0);
                             String status= jsonObjectWeather.getString("main");
                             String icon=jsonObjectWeather.getString("icon");
-                            Picasso.with(MainActivity.this).load("http://openweathermap.org/img/w"+icon+".png").into(imgIcon);
+                            Picasso.with(MainActivity.this).load("http://openweathermap.org/img/w/"+icon+".png").into(imgIcon);
                             txtStatus.setText(status);
 
                             JSONObject jsonObjectMain= jsonObject.getJSONObject("main");
@@ -88,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
                              JSONObject jsonObjectsys= jsonObject.getJSONObject("sys");
                              String country= jsonObjectsys.getString("country");
-                             txtCountry.setText("Tên quốc gia:"+country);
+                             txtCountry.setText("Tên quốc gia: "+ country);
 
                         } catch (JSONException e) {
                             e.printStackTrace();

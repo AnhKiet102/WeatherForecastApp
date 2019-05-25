@@ -14,12 +14,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
+
 public class Main3Activity extends AppCompatActivity {
     String cityname;
     ImageView imageViewback,imageViewtrangthai;
     TextView textViewngaythang,textViewtrangthai,textViewmin,textViewmax,textViewname;
     ListView lv;
-
+   customAdapter customadapter;
+   ArrayList<Thoitiet> mangthoitiet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public class Main3Activity extends AppCompatActivity {
         imageViewback=(ImageView)findViewById(R.id.imageviewback);
         textViewname=(TextView)findViewById(R.id.textviewcityname);
         lv=(ListView)findViewById(R.id.listview);
+        mangthoitiet = new ArrayList<Thoitiet>();
+        customadapter = new customAdapter(Main3Activity.this,mangthoitiet);
 
 
     }

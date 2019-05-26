@@ -41,6 +41,7 @@ public class customAdapter extends BaseAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.dong_listview,null);
         Thoitiet thoitiet= arrayList.get(position);
+
         TextView textViewDay=(TextView)convertView.findViewById(R.id.textviewngaythang);
         TextView textViewStatus=(TextView)convertView.findViewById(R.id.textviewtrangthai);
         TextView textViewMin=(TextView)convertView.findViewById(R.id.textviewmin);
